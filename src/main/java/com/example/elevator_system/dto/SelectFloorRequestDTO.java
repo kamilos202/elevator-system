@@ -9,22 +9,16 @@ import lombok.Setter;
 @Setter
 @Getter
 public class SelectFloorRequestDTO {
-    private int elevatorId;
     private int floor;
 
     public SelectFloorRequestDTO() {}
 
-    public SelectFloorRequestDTO(int elevatorId, int floor) {
-        this.elevatorId = elevatorId;
+    public SelectFloorRequestDTO(int floor) {
         this.floor = floor;
     }
 
     @Override
     public String toString() {
-        return "SelectFloorRequestDTO{" +
-                "elevatorId=" + elevatorId +
-                ", floor=" + floor +
-                '}';
+        return "SelectFloorRequestDTO{floor=" + floor + '}';
     }
 }
-
