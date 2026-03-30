@@ -72,6 +72,7 @@ Implements the **SCAN (Elevator) Algorithm**:
 | `/api/elevator/{id}/select` | POST | Select floor inside elevator (internal) |
 | `/api/elevator/status` | GET | Get all elevators and floors status |
 | `/api/elevator/{id}` | GET | Get single elevator status |
+| `/api/elevator/queue` | GET | Inspect pending dispatch requests (debug) |
 | `/api/elevator/health` | GET | Health check |
 
 **Example Request:**
@@ -175,35 +176,78 @@ elevator-ui/
 
 ### Installation & Running
 
-#### 1. Build Backend
+#### 1. Start the backend
+
+The quickest way — no need to build a JAR first:
 
 ```bash
-cd /Users/kamilflorowski/IdeaProjects/elevator-system
-./mvnw clean package -DskipTests
+./mvnw spring-boot:run
 ```
 
-#### 2. Start Backend Server
+Or if you prefer building a JAR and running it explicitly:
 
 ```bash
+./mvnw clean package -DskipTests
 java -jar target/elevator-system-0.0.1-SNAPSHOT.jar
 ```
 
 Backend runs on `http://localhost:8080`
 
-#### 3. Start Frontend (in separate terminal)
+#### 2. Start the frontend (separate terminal)
 
 ```bash
 cd elevator-ui
-ng serve
+npm start
 ```
 
 Frontend runs on `http://localhost:4200`
 
-#### 4. Open in Browser
+#### 3. Open in browser
 
 ```
 http://localhost:4200
 ```
+
+---
+
+### Running the Tests
+
+All unit and integration tests are run with a single command from the project root:
+
+```bash
+./mvnw test
+```
+
+To run a specific test class:
+
+```bash
+./mvnw test -Dtest="ScanAlgorithmTest"
+./mvnw test -Dtest="ElevatorControllerIT"
+./mvnw test -Dtest="ElevatorSimulationIT"
+```
+
+To run a single test method:
+
+```bash
+./mvnw test -Dtest="ScanAlgorithmTest#getNextFloor"
+```
+
+To skip tests during a build:
+
+```bash
+./mvnw package -DskipTests
+```
+
+**Test breakdown (56 tests total):**
+
+| Class | Count | What it covers |
+|---|---|---|
+| `ScanAlgorithmTest` | 15 | SCAN algorithm — idle, sweep, reversal, door-open logic |
+| `ElevatorTest` | 12 | Domain model — state transitions, capacity, thread-safe copy |
+| `RequestQueueTest` | 9 | Priority ordering, FIFO tie-breaking, snapshot isolation |
+| `ElevatorServiceTest` | 15 | API validation, exception types, status queries |
+| `ElevatorControllerIT` | 11 | HTTP endpoints via MockMvc — status codes, JSON shape |
+| `ElevatorSimulationIT` | 6 | End-to-end: movement, door cycle, multi-call dispatch |
 
 ---
 
@@ -417,7 +461,7 @@ done
 # Select floor 9 from inside elevator 0
 curl -X POST http://localhost:8080/api/elevator/0/select \
   -H "Content-Type: application/json" \
-  -d '{"elevatorId": 0, "floor": 9}'
+  -d '{"floor": 9}'
 ```
 
 ---
@@ -508,7 +552,7 @@ elevator-system/
 - **Lombok** - Code generation
 
 ### Frontend
-- **Angular 18** - Web framework
+- **Angular 21** - Web framework
 - **TypeScript** - Programming language
 - **SCSS** - Styling
 - **RxJS** - Reactive programming
