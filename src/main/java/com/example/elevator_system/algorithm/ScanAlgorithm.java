@@ -2,7 +2,9 @@ package com.example.elevator_system.algorithm;
 
 import com.example.elevator_system.model.Direction;
 import com.example.elevator_system.model.Elevator;
-import java.util.*;
+
+import java.util.Comparator;
+import java.util.Set;
 
 /**
  * SCAN algorithm — the classic "elevator algorithm" you'll find in OS textbooks.

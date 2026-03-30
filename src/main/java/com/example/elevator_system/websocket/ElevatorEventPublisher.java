@@ -43,8 +43,6 @@ public class ElevatorEventPublisher {
                 return t;
             });
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
     public ElevatorEventPublisher() {
     }
 

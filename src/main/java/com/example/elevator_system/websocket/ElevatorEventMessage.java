@@ -1,11 +1,16 @@
 package com.example.elevator_system.websocket;
 
 import com.example.elevator_system.dto.ElevatorStatusDTO;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
 /**
  * Represents an elevator event that is sent via WebSocket to clients.
  */
+@Setter
+@Getter
 public class ElevatorEventMessage {
     private String type; // ELEVATOR_MOVED, DOOR_OPENED, DOOR_CLOSED, REQUEST_PROCESSED
     private ElevatorStatusDTO elevatorStatus;
@@ -21,38 +26,6 @@ public class ElevatorEventMessage {
         this.elevatorStatus = elevatorStatus;
         this.message = message;
         this.timestamp = LocalDateTime.now();
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public ElevatorStatusDTO getElevatorStatus() {
-        return elevatorStatus;
-    }
-
-    public void setElevatorStatus(ElevatorStatusDTO elevatorStatus) {
-        this.elevatorStatus = elevatorStatus;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     @Override

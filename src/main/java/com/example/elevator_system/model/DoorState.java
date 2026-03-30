@@ -1,5 +1,7 @@
 package com.example.elevator_system.model;
 
+import lombok.Getter;
+
 /**
  * The four stages a door goes through in each open/close cycle:
  * CLOSED → OPENING → OPEN → CLOSING → CLOSED.
@@ -8,6 +10,7 @@ package com.example.elevator_system.model;
  * transition over time rather than flipping instantly, which looks more realistic
  * in the UI and also prevents the elevator from moving while the doors are still moving.
  */
+@Getter
 public enum DoorState {
     OPEN("Open"),
     CLOSED("Closed"),
@@ -20,7 +23,4 @@ public enum DoorState {
         this.display = display;
     }
 
-    public String getDisplay() {
-        return display;
-    }
 }

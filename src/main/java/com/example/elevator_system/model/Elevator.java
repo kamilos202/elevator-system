@@ -2,7 +2,10 @@ package com.example.elevator_system.model;
 
 import lombok.Getter;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
