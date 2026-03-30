@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, interval } from 'rxjs';
+import {Observable, BehaviorSubject, interval, catchError, EMPTY} from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
 export interface ElevatorStatus {
@@ -54,12 +54,20 @@ export class ElevatorService {
   private startStatusPolling(): void {
     interval(500)
       .pipe(
-        switchMap(() => this.getStatus())
+        switchMap(() =>
+          this.getStatus().pipe(
+            catchError(err => {
+              // Don't let a single failed HTTP call kill the whole interval.
+              // Just log it and skip this tick.
+              console.warn('Status poll failed, will retry:', err);
+              return EMPTY;
+            })
+          )
+        )
       )
-      .subscribe(
-        (status) => this.statusSubject.next(status),
-        (error) => console.error('Error polling elevator status:', error)
-      );
+      .subscribe({
+        next: (status) => this.statusSubject.next(status)
+      });
   }
 
   /**

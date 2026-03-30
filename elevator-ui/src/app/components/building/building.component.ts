@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ElevatorService, SystemStatus, SystemConfig } from '../../services/elevator.service';
 import { WebSocketService } from '../../services/websocket.service';
@@ -16,6 +16,7 @@ import { StatusPanelComponent } from '../status-panel/status-panel.component';
 export class BuildingComponent implements OnInit, OnDestroy {
   private elevatorService = inject(ElevatorService);
   private webSocketService = inject(WebSocketService);
+  private cdr = inject(ChangeDetectorRef);   // <-- NEW
 
   systemStatus: SystemStatus | null = null;
   systemConfig: SystemConfig | null = null;
@@ -27,30 +28,35 @@ export class BuildingComponent implements OnInit, OnDestroy {
     this.initializeStatus();
     this.loading = false;
 
-    // Track real WebSocket connection status
-    this.webSocketService.connectionStatus$.subscribe(
-      (connected: boolean) => { this.isConnected = connected; }
-    );
+    this.webSocketService.connectionStatus$.subscribe((connected: boolean) => {
+      this.isConnected = connected;
+      this.cdr.detectChanges();
+    });
 
-    // HTTP polling provides config + full state
+    // HTTP polling: full system snapshot every 500 ms
     this.elevatorService.status$.subscribe({
       next: (status: SystemStatus | null) => {
         if (status) {
           this.systemStatus = status;
           this.systemConfig = status.config;
+          this.cdr.detectChanges();   // <-- zoneless needs explicit notification
         }
       },
-      error: (err: any) => console.warn('HTTP polling unavailable, using WebSocket only:', err)
+      error: (err: any) => console.warn('HTTP polling unavailable:', err)
     });
 
-    // WebSocket events provide real-time elevator position updates
+    // WebSocket: real-time elevator position updates
     this.webSocketService.events$.subscribe({
       next: (event: any) => {
         if (event && event.elevatorStatus && this.systemStatus) {
           const idx = this.systemStatus.elevators.findIndex(e => e.id === event.elevatorStatus.id);
           if (idx >= 0) {
-            this.systemStatus.elevators[idx] = event.elevatorStatus;
-            this.systemStatus = { ...this.systemStatus }; // trigger change detection
+            // Spread BOTH the outer object AND the array — a shallow spread would keep
+            // the same array reference and child components wouldn't see new input.
+            const updatedElevators = [...this.systemStatus.elevators];
+            updatedElevators[idx] = event.elevatorStatus;
+            this.systemStatus = { ...this.systemStatus, elevators: updatedElevators };
+            this.cdr.detectChanges();   // <-- NEW
           }
         }
       }
@@ -81,12 +87,7 @@ export class BuildingComponent implements OnInit, OnDestroy {
   private createDefaultFloors(numberOfFloors: number): { [key: number]: any } {
     const floors: { [key: number]: any } = {};
     for (let i = 0; i < numberOfFloors; i++) {
-      floors[i] = {
-        floorNumber: i,
-        callUpButton: false,
-        callDownButton: false,
-        waitingPassengers: 0
-      };
+      floors[i] = { floorNumber: i, callUpButton: false, callDownButton: false, waitingPassengers: 0 };
     }
     return floors;
   }
@@ -96,9 +97,7 @@ export class BuildingComponent implements OnInit, OnDestroy {
   }
 
   getFloorsArray(): number[] {
-    if (!this.systemConfig) {
-      return [];
-    }
+    if (!this.systemConfig) return [];
     return Array.from({ length: this.systemConfig.numberOfFloors }, (_, i) => i);
   }
 }
