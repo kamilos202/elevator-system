@@ -1,0 +1,63 @@
+<div class="status-panel">
+  <h2>System Status</h2>
+
+  <div class="status-grid">
+    <div class="status-card">
+      <span class="label">Elevators</span>
+      <span class="value">{{ systemConfig?.numberOfElevators }}</span>
+    </div>
+    <div class="status-card">
+      <span class="label">Floors</span>
+      <span class="value">{{ systemConfig?.numberOfFloors }}</span>
+    </div>
+    <div class="status-card">
+      <span class="label">Active</span>
+      <span class="value">{{ getActiveElevators() }}</span>
+    </div>
+    <div class="status-card">
+      <span class="label">Capacity</span>
+      <span class="value">{{ systemConfig?.elevatorCapacity }}</span>
+    </div>
+  </div>
+
+  <div class="requests-section">
+    <span class="label">Pending Stops</span>
+    <div class="requests-list">
+      <span *ngIf="getAllRequestedFloors().length === 0" class="no-requests">No pending requests</span>
+      <span *ngFor="let floor of getAllRequestedFloors()" class="floor-tag">
+        {{ floor === 0 ? 'G' : floor }}
+      </span>
+    </div>
+  </div>
+
+  <div class="elevators-status">
+    <span class="label">Elevator Status</span>
+    <div *ngFor="let status of systemStatus?.elevators" class="elevator-row"
+         [class.active]="status.direction !== 'Idle'"
+         [class.door-open]="status.doorState === 'Open' || status.doorState === 'Opening'">
+      <span class="elevator-name">E{{ status.id + 1 }}</span>
+      <span class="elevator-floor">{{ status.currentFloor === 0 ? 'G' : 'F' + status.currentFloor }}</span>
+      <span class="elevator-dir">
+        <span *ngIf="status.direction === 'Up'">▲</span>
+        <span *ngIf="status.direction === 'Down'">▼</span>
+        <span *ngIf="status.direction === 'Idle'">●</span>
+      </span>
+      <span class="elevator-door" *ngIf="status.doorState === 'Open' || status.doorState === 'Opening'">
+        Doors Open
+      </span>
+      <span class="pending-floors" *ngIf="status.requestedFloors && status.requestedFloors.length > 0">
+        → {{ formatFloors(status.requestedFloors) }}
+      </span>
+    </div>
+  </div>
+
+  <div class="how-to">
+    <span class="label">How to use</span>
+    <ul>
+      <li>Click <strong>▲ Up</strong> / <strong>▼ Down</strong> on a floor to call an elevator</li>
+      <li>Press a floor button inside an elevator shaft to choose a destination</li>
+      <li>Yellow buttons = elevator en route · Green = doors open</li>
+    </ul>
+  </div>
+</div>
+

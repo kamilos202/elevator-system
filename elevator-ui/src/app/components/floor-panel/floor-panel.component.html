@@ -1,0 +1,28 @@
+<div class="floor-panel" [class.has-elevator]="hasElevator()">
+  <div class="floor-info">
+    <span class="floor-label">{{ getFloorLabel() }}</span>
+    <span *ngIf="hasElevator()" class="elevator-indicator">
+      🛗 {{ getElevatorSummary() }}
+    </span>
+  </div>
+
+  <div class="call-buttons">
+    <button
+      *ngIf="canCallUp"
+      class="call-btn up-btn"
+      [class.active]="isCallUpActive"
+      (click)="callUp.emit()"
+      title="Call elevator going Up">
+      ▲ Up
+    </button>
+
+    <button
+      *ngIf="canCallDown"
+      class="call-btn down-btn"
+      [class.active]="isCallDownActive"
+      (click)="callDown.emit()"
+      title="Call elevator going Down">
+      ▼ Down
+    </button>
+  </div>
+</div>

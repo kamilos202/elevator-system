@@ -1,0 +1,52 @@
+<div class="shaft-container">
+  <div class="shafts-grid" [style.grid-template-columns]="'repeat(' + elevators.length + ', 1fr)'">
+
+    <div *ngFor="let elevator of elevators" class="shaft" [attr.data-shaft]="elevator.id">
+
+      <!-- Elevator header -->
+      <div class="shaft-label">
+        <span class="elevator-id">Elevator {{ elevator.id + 1 }}</span>
+        <span class="elevator-status" [class.moving]="elevator.direction !== 'Idle'"
+              [class.door-open]="elevator.doorState === 'Open' || elevator.doorState === 'Opening'">
+          {{ elevator.direction }}
+          <span *ngIf="elevator.doorState === 'Open' || elevator.doorState === 'Opening'"> · Doors Open</span>
+        </span>
+      </div>
+
+      <!-- Shaft visual track -->
+      <div class="shaft-track">
+        <!-- Floor slots — flex column, floor N-1 at top, floor 0 at bottom -->
+        <div *ngFor="let floorNum of getFloorsReversed()"
+             class="floor-slot"
+             [class.ground-floor]="floorNum === 0">
+          <span class="floor-number">{{ getFloorLabel(floorNum) }}</span>
+        </div>
+
+        <!-- Elevator car — absolutely positioned, animates via CSS transition -->
+        <app-elevator-car
+          [elevator]="elevator"
+          [numberOfFloors]="numberOfFloors"
+          [position]="getElevatorPosition(elevator.currentFloor)">
+        </app-elevator-car>
+      </div>
+
+      <!-- Floor selector — simulates buttons inside the elevator -->
+      <div class="floor-selector">
+        <span class="selector-label">Inside Elevator {{ elevator.id + 1 }} — Select floor:</span>
+        <div class="floor-buttons">
+          <button *ngFor="let f of getFloorNumbers()"
+                  class="floor-btn"
+                  [class.current]="f === elevator.currentFloor"
+                  [class.pending]="isFloorPending(elevator, f)"
+                  [disabled]="f === elevator.currentFloor"
+                  [title]="f === 0 ? 'Ground floor' : 'Floor ' + f"
+                  (click)="onSelectFloor(elevator.id, f)">
+            {{ getFloorLabel(f) }}
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+

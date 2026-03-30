@@ -1,0 +1,17 @@
+<div class="elevator-car" [style.bottom]="position"
+     [class.door-open]="elevator?.doorState === 'Open' || elevator?.doorState === 'Opening'"
+     [class.moving-up]="elevator?.direction === 'Up'"
+     [class.moving-down]="elevator?.direction === 'Down'">
+
+  <div class="car-header">
+    <span class="direction-icon">{{ getDirectionIcon() }}</span>
+    <span class="floor-number">{{ elevator?.currentFloor === 0 ? 'G' : elevator?.currentFloor }}</span>
+  </div>
+
+  <div class="car-stops" *ngIf="elevator?.requestedFloors && elevator!.requestedFloors.length > 0">
+    <span *ngFor="let f of elevator!.requestedFloors" class="stop-badge">
+      {{ f === 0 ? 'G' : f }}
+    </span>
+  </div>
+
+</div>

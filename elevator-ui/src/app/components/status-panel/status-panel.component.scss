@@ -1,0 +1,217 @@
+.status-panel {
+  width: 320px;
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-height: 800px;
+  overflow-y: auto;
+
+  h2 {
+    margin: 0;
+    color: #1e293b;
+    font-size: 1.4em;
+    text-align: center;
+  }
+
+  .label {
+    display: block;
+    color: #64748b;
+    font-size: 0.85em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+
+  .status-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+
+    .label {
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 8px;
+    }
+
+    .value {
+      display: block;
+      font-size: 1.8em;
+      font-weight: 700;
+    }
+  }
+}
+
+.occupancy-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .occupancy-bar {
+    height: 10px;
+    background: #e2e8f0;
+    border-radius: 5px;
+    overflow: hidden;
+
+    .occupancy-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #667eea);
+      transition: width 0.3s ease;
+    }
+  }
+
+  .percentage {
+    font-weight: 700;
+    color: #667eea;
+    font-size: 0.9em;
+  }
+}
+
+.requests-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .requests-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+
+    .no-requests {
+      color: #94a3b8;
+      font-style: italic;
+      font-size: 0.85em;
+    }
+
+    .floor-tag {
+      background: #f1f5f9;
+      color: #334155;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.8em;
+      font-weight: 600;
+      border: 1px solid #cbd5e1;
+    }
+  }
+}
+
+.elevators-status {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .elevator-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: #f8fafc;
+    border-radius: 6px;
+    border-left: 3px solid #667eea;
+    font-size: 0.85em;
+    flex-wrap: wrap;
+
+    &.active { border-left-color: #3b82f6; background: #eff6ff; }
+    &.door-open { border-left-color: #10b981; background: #f0fdf4; }
+
+    .elevator-name {
+      font-weight: 800;
+      color: #1e293b;
+      min-width: 28px;
+    }
+
+    .elevator-floor {
+      font-weight: 700;
+      color: #667eea;
+      min-width: 28px;
+    }
+
+    .elevator-dir {
+      color: #334155;
+      font-weight: 600;
+    }
+
+    .elevator-door {
+      font-size: 0.8em;
+      background: #10b981;
+      color: white;
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+
+    .pending-floors {
+      font-size: 0.78em;
+      color: #f59e0b;
+      font-weight: 600;
+    }
+  }
+}
+
+.how-to {
+  padding-top: 12px;
+  border-top: 1px solid #e2e8f0;
+
+  ul {
+    margin: 6px 0 0 0;
+    padding-left: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    li {
+      font-size: 0.78em;
+      color: #64748b;
+      line-height: 1.4;
+    }
+  }
+}
+
+/* Scrollbar styling */
+.status-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.status-panel::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.status-panel::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+
+  &:hover {
+    background: #94a3b8;
+  }
+}
+
+@media (max-width: 1024px) {
+  .status-panel {
+    width: 100%;
+    max-height: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .status-panel {
+    padding: 15px;
+
+    .status-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+

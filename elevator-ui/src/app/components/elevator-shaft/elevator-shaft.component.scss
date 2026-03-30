@@ -1,0 +1,181 @@
+.shaft-container {
+  flex: 1;
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: 10px;
+}
+
+.shafts-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.shaft {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color 0.3s ease;
+
+  &:hover {
+    border-color: #667eea;
+  }
+
+  &[data-shaft='0'] {
+    border-top: 4px solid #3b82f6;
+  }
+
+  &[data-shaft='1'] {
+    border-top: 4px solid #10b981;
+  }
+
+  &[data-shaft='2'] {
+    border-top: 4px solid #f59e0b;
+  }
+
+  &[data-shaft='3'] {
+    border-top: 4px solid #8b5cf6;
+  }
+}
+
+.shaft-label {
+  text-align: center;
+
+  .elevator-id {
+    display: block;
+    font-weight: 700;
+    color: #1e293b;
+    font-size: 1em;
+  }
+
+  .elevator-status {
+    font-size: 0.78em;
+    color: #94a3b8;
+    font-weight: 500;
+
+    &.moving {
+      color: #3b82f6;
+      font-weight: 600;
+    }
+
+    &.door-open {
+      color: #10b981;
+      font-weight: 600;
+    }
+  }
+}
+
+/* ── Shaft Track ─────────────────────────────────────── */
+.shaft-track {
+  position: relative;
+  height: 500px;
+  display: flex;
+  flex-direction: column; /* floor N-1 at top, floor 0 at bottom */
+  background: linear-gradient(to bottom, #f1f5f9, #e2e8f0);
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* Each row represents one floor */
+.floor-slot {
+  flex: 1;
+  border-bottom: 1px solid #dde4ed;
+  display: flex;
+  align-items: center;
+  padding-left: 6px;
+  position: relative; /* needed so floor-number stacks under elevator */
+
+  &.ground-floor {
+    border-bottom: 2px solid #475569;
+    background: rgba(71, 85, 105, 0.05);
+  }
+
+  .floor-number {
+    font-size: 0.65em;
+    color: #94a3b8;
+    font-weight: 700;
+    z-index: 1;
+    user-select: none;
+  }
+}
+
+/* ── Floor Selector ──────────────────────────────────── */
+.floor-selector {
+  .selector-label {
+    display: block;
+    font-size: 0.75em;
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+
+  .floor-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+
+    .floor-btn {
+      width: 30px;
+      height: 30px;
+      border: 2px solid #e2e8f0;
+      background: #f8fafc;
+      border-radius: 4px;
+      font-size: 0.72em;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      color: #334155;
+      padding: 0;
+
+      &:hover:not(:disabled) {
+        border-color: #667eea;
+        background: #eef2ff;
+        color: #667eea;
+        transform: scale(1.1);
+      }
+
+      &:disabled {
+        cursor: not-allowed;
+      }
+
+      &.current {
+        background: #667eea;
+        border-color: #5a67d8;
+        color: white;
+      }
+
+      &.pending {
+        background: #f59e0b;
+        border-color: #d97706;
+        color: white;
+        animation: pulse-btn 0.8s ease-in-out infinite;
+      }
+    }
+  }
+}
+
+@keyframes pulse-btn {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.65;
+  }
+}
+
+@media (max-width: 768px) {
+  .shaft-container {
+    padding: 10px;
+  }
+
+  .shaft-track {
+    height: 300px;
+  }
+}

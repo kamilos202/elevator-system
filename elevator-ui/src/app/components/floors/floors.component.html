@@ -1,0 +1,16 @@
+<div class="floors-container">
+  <div class="floors-list">
+    <app-floor-panel
+      *ngFor="let floor of getFloorsReversed()"
+      [floor]="floor"
+      [numberOfFloors]="numberOfFloors"
+      [canCallUp]="canCallUp(floor)"
+      [canCallDown]="canCallDown(floor)"
+      [isCallUpActive]="isCallButtonActive(floor, 'UP')"
+      [isCallDownActive]="isCallButtonActive(floor, 'DOWN')"
+      [elevatorsAtFloor]="getElevatorsAtFloor(floor)"
+      (callUp)="callElevator(floor, 'UP')"
+      (callDown)="callElevator(floor, 'DOWN')">
+    </app-floor-panel>
+  </div>
+</div>

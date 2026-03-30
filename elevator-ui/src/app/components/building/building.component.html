@@ -1,0 +1,40 @@
+<div class="building-container">
+  <div class="building-header">
+    <h1>🏢 Elevator System Simulation</h1>
+    <div class="connection-status" [class.connected]="isConnected" [class.disconnected]="!isConnected">
+      <span class="status-dot" [class.disconnected]="!isConnected"></span>
+      {{ isConnected ? 'Connected' : 'Connecting...' }}
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    <p>Loading elevator system...</p>
+  </div>
+
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!loading && systemStatus && systemConfig" class="building-layout">
+    <div class="building-main">
+      <app-elevator-shaft
+        [elevators]="systemStatus.elevators"
+        [numberOfFloors]="systemConfig.numberOfFloors"
+        [floors]="getFloorsArray()">
+      </app-elevator-shaft>
+
+      <app-floors
+        [floors]="systemStatus.floors"
+        [elevators]="systemStatus.elevators"
+        [numberOfFloors]="systemConfig.numberOfFloors"
+        [numberOfElevators]="systemConfig.numberOfElevators">
+      </app-floors>
+    </div>
+
+    <app-status-panel
+      [systemStatus]="systemStatus"
+      [systemConfig]="systemConfig">
+    </app-status-panel>
+  </div>
+</div>
+

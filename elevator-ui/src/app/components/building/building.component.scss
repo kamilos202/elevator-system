@@ -1,0 +1,124 @@
+.building-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.building-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  color: white;
+
+  h1 {
+    margin: 0;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.connection-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: white;
+  font-weight: 600;
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    background: #4ade80;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+
+    &.disconnected {
+      background: #fbbf24;
+      animation: pulse 1s infinite;
+    }
+  }
+
+  &.disconnected {
+    background: rgba(251, 191, 36, 0.2);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.loading, .error-message {
+  text-align: center;
+  color: white;
+  font-size: 1.2em;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  margin: 20px 0;
+}
+
+.error-message {
+  background: rgba(239, 68, 68, 0.3);
+  border-left: 4px solid #ef4444;
+}
+
+.building-layout {
+  display: flex;
+  gap: 20px;
+  max-width: 1600px;
+  margin: 0 auto;
+
+  .building-main {
+    flex: 1;
+    display: flex;
+    gap: 20px;
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  }
+}
+
+@media (max-width: 1024px) {
+  .building-layout {
+    flex-direction: column;
+  }
+
+  .building-header h1 {
+    font-size: 1.8em;
+  }
+}
+
+@media (max-width: 768px) {
+  .building-container {
+    padding: 10px;
+  }
+
+  .building-layout {
+    gap: 10px;
+
+    .building-main {
+      flex-direction: column;
+      padding: 10px;
+    }
+  }
+
+  .building-header {
+    flex-direction: column;
+    gap: 10px;
+
+    h1 {
+      font-size: 1.5em;
+    }
+  }
+}
+
